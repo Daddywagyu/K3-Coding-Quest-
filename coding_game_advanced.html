@@ -286,7 +286,7 @@
             padding: 10px 12px;
             margin: 5px 0;
             border-radius: 8px;
-            cursor: move;
+            cursor: pointer; /* แก้ไข: เปลี่ยนเมาส์เป็นรูปนิ้วตอนชี้ */
             user-select: none;
             font-size: 13px;
             font-weight: bold;
@@ -611,28 +611,26 @@
         </div>
 
         <div class="main-content">
-            <!-- Game Canvas -->
             <div class="game-section">
                 <div class="obstacle-info" id="obstacleInfo"></div>
                 <div class="game-canvas" id="gameCanvas"></div>
                 <div class="stars-collected" id="starsDisplay">⭐: 0/3</div>
             </div>
 
-            <!-- Programming Section -->
             <div class="programming-section" id="programmingSection">
                 <div class="control-label">🧩 ท่อนโปรแกรม</div>
 
                 <div class="program-blocks" id="programBlocksMode">
-                    <div class="control-label" style="font-size: 12px; color: #999;">📌 ลากปุ่มมาวางในช่องคำสั่ง</div>
+                    <div class="control-label" style="font-size: 12px; color: #999;">📌 คลิกที่ปุ่มเพื่อเพิ่มคำสั่งลงในกล่อง</div>
                     <div class="block-palette">
-                        <div class="block" draggable="true" ondragstart="dragStart(event)" data-command="up">⬆ ขึ้น</div>
-                        <div class="block" draggable="true" ondragstart="dragStart(event)" data-command="down">⬇ ลง</div>
-                        <div class="block" draggable="true" ondragstart="dragStart(event)" data-command="left">⬅ ซ้าย</div>
-                        <div class="block" draggable="true" ondragstart="dragStart(event)" data-command="right">➡ ขวา</div>
+                        <div class="block" onclick="addProgramBlock('up')">⬆ ขึ้น</div>
+                        <div class="block" onclick="addProgramBlock('down')">⬇ ลง</div>
+                        <div class="block" onclick="addProgramBlock('left')">⬅ ซ้าย</div>
+                        <div class="block" onclick="addProgramBlock('right')">➡ ขวา</div>
                     </div>
 
                     <div class="control-label">📋 ลำดับคำสั่ง</div>
-                    <div class="program-area" id="programArea" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                    <div class="program-area" id="programArea"></div>
 
                     <div class="control-buttons" style="margin-top: 15px;">
                         <button class="btn btn-primary" id="runBtn" onclick="runProgram()">▶ Run</button>
@@ -664,7 +662,6 @@
         </div>
     </div>
 
-    <!-- Finish Modal -->
     <div class="modal" id="finishModal">
         <div class="modal-content">
             <h2>🎉 สำเร็จ!</h2>
@@ -694,7 +691,6 @@
         </div>
     </div>
 
-    <!-- Game Over Modal -->
     <div class="modal" id="gameOverModal">
         <div class="modal-content">
             <h2>🏁 เสร็จสิ้น!</h2>
@@ -1043,22 +1039,6 @@
         }
 
         // ===== PROGRAM MODE =====
-        function dragStart(event) {
-            event.dataTransfer.effectAllowed = 'copy';
-            event.dataTransfer.setData('command', event.target.dataset.command);
-        }
-
-        function allowDrop(event) {
-            event.preventDefault();
-            event.dataTransfer.dropEffect = 'copy';
-        }
-
-        function drop(event) {
-            event.preventDefault();
-            const command = event.dataTransfer.getData('command');
-            addProgramBlock(command);
-        }
-
         function addProgramBlock(command) {
             gameState.programMoves.push(command);
             renderProgramArea();
@@ -1071,7 +1051,7 @@
             const commands = { 'up': '⬆ ขึ้น', 'down': '⬇ ลง', 'left': '⬅ ซ้าย', 'right': '➡ ขวา' };
 
             if (gameState.programMoves.length === 0) {
-                area.innerHTML = '<span style="color: #999;">ลากท่อนโปรแกรมมาที่นี่...</span>';
+                area.innerHTML = '<span style="color: #999;">คลิกปุ่มด้านบนเพื่อเพิ่มคำสั่ง...</span>';
                 return;
             }
 
